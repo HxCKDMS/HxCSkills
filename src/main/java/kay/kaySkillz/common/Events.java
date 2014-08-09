@@ -10,7 +10,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
 
 import java.util.EnumSet;
 import java.util.EventListener;
@@ -78,6 +77,15 @@ public class Events implements EventListener {
                         if (!event.player.isSneaking())
                             event.setCanceled(false);
                             NBTStuff.SkillAgilityXP = NBTStuff.SkillAgilityXP + XPGainPF;
+                    }
+                    else{
+                        NBTStuff.SkillAgilityXP = NBTStuff.SkillAgilityXP - Config.XPRate;
+                        if (NBTStuff.SkillAgilityLVL >= 100){
+                            float dmg = event.player.fallDistance - NBTStuff.SkillAgilityLVL;
+                            float Damage = dmg * -1;
+                            event.setCanceled(true);
+                            player.heal(Damage);
+                        }
                     }
                 }
 
