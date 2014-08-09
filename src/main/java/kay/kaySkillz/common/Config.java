@@ -11,6 +11,7 @@ public class Config {
 
     public static int BaseStatModifier;
     public static int XPRate;
+    public static int Difficulty;
 
     public Config(Configuration config) {
         config.load();
@@ -22,6 +23,7 @@ public class Config {
 
         BaseStatModifier = config.get("Meh", "This is the Base Modifier for stats if 5 then u can fall 5 more blocks per level of Agility", 5).getInt();
         XPRate = config.get("Meh", "This is Base XP Rate for gaining XP for skills Note: this is multiplied by 5 in some areas", 5).getInt();
+        Difficulty = config.get("Meh", "This is the difficulty of the mod Note: keep this divisible by 5 minimum 10 max 1000000", 100).getInt();
 
 
         if (config.hasChanged()) {

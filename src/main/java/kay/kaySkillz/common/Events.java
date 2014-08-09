@@ -4,15 +4,12 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import kay.kayXEnchants.common.NBTStuff;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 
-import java.lang.reflect.Array;
 import java.util.EnumSet;
 import java.util.EventListener;
 
@@ -97,18 +94,12 @@ public class Events implements EventListener {
                     event.setCanceled(true);
                 else
                     event.setCanceled(false);
-                    if (NBTStuff.SkillImmuneLVL >= 25)
+                    if (NBTStuff.SkillImmuneLVL >= 25) {
                         player.addPotionEffect(new PotionEffect(Potion.regeneration.id, NBTStuff.SkillImmuneLVL / 250, 2));
-            }else{
-                NBTStuff.SkillImmuneXP = NBTStuff.SkillImmuneXP - Config.XPRate;
-                if (NBTStuff.SkillImmuneLVL >= 100){
-                    float dmg = event.player.fallDistance - NBTStuff.SkillImmuneLVL;
-                    float Damage = dmg * -1;
-                    event.setCanceled(true);
-                    player.heal(Damage);
-                }
+                        if (player.getActivePotionEffect(Potion.poison).getIsAmbient() || player.getActivePotionEffect(Potion.wither).getIsAmbient() || event.type.equals(DamageSource.magic))
+                        NBTStuff.SkillImmuneXP = NBTStuff.SkillImmuneXP + Config.XPRate *5;
+                    }
             }
         }
-
     }
 }
