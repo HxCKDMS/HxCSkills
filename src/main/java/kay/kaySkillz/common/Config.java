@@ -3,7 +3,9 @@ package kay.kaySkillz.common;
 import net.minecraftforge.common.config.*;
 
 public class Config {
+    public static boolean AgilitySkillEnable;
     public static boolean FlySkillEnable;
+    public static boolean ImunityToPoisonSkillEnable;
 
     public static boolean EnableAgilityReq;
 
@@ -12,7 +14,9 @@ public class Config {
 
     public Config(Configuration config) {
         config.load();
-        FlySkillEnable = config.get("Skills", "Enable the Fly Skill", true).getBoolean(true);
+        AgilitySkillEnable = config.get("Skills", "Enable the Agility Skill", true).getBoolean(true);
+        FlySkillEnable = config.get("Skills", "Enable the Fly Skill(Requires Agility)", true).getBoolean(true);
+        ImunityToPoisonSkillEnable = config.get("Skills", "Enable the Immunity to poisons/wither Skill", true).getBoolean(true);
 
         EnableAgilityReq = config.get("Requirements", "Enable the Boots Requirement for Agility skill", true).getBoolean(true);
 
