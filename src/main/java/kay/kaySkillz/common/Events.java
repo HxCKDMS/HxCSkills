@@ -91,7 +91,7 @@ public class Events implements EventListener {
                     }
                 }
 
-        if (event.type.equals(DamageSource.magic) || event.type.equals(DamageSource.wither) && (event.player != null) && !player.worldObj.isRemote && Config.ImunityToPoisonSkillEnable)
+        if (event.type.equals(DamageSource.magic) || event.type.equals(DamageSource.wither) && (event.player != null) && !player.worldObj.isRemote && Config.ImunityToPoisonSkillEnable){
             if (!player.capabilities.isCreativeMode && event.player.fallDistance <= NBTStuff.SkillImmuneLVL * Config.BaseStatModifier) {
                 if (NBTStuff.SkillImmuneLVL >= 1000)
                     event.setCanceled(true);
