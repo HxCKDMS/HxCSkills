@@ -3,11 +3,9 @@ package kay.kayXEnchants.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import kay.kayXEnchants.common.NBTStuff;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 
 public class CommandDebugGetNBT implements ICommand
 {

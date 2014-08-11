@@ -22,16 +22,12 @@ public class Events implements EventListener {
             EntityPlayer player = (EntityPlayer) tickData[0];
             boolean Fly = false;
             if (Config.FlySkillEnable) {
-                if (NBTStuff.SkillAgilityLVL >= 1000) {
-                    Fly = true;
-                } else {
-                    Fly = false;
-                }
+                Fly = NBTHandler.SkillAgilityLVL >= 1000;
             }
-            if (Fly == true) {
+            if (Fly) {
                 player.capabilities.allowFlying = true;
                 if (player.capabilities.isFlying && player.worldObj.isRemote) {
-                    int MaxFlyHeight = NBTStuff.SkillAgilityLVL - 940;
+                    int MaxFlyHeight = NBTHandler.SkillAgilityLVL - 940;
                     int h = (int) player.getEyeHeight();
                     player.addExhaustion(1);
                     player.worldObj.spawnParticle("smoke", player.posX + Math.random() - 0.5d, player.posY - 1.62d, player.posZ + Math.random() - 0.5d, 0.0d, 0.0d, 0.0d);
@@ -63,24 +59,24 @@ public class Events implements EventListener {
             if (!player.capabilities.isCreativeMode)
                 if (Config.EnableAgilityReq)
                     if (player.getCurrentArmor(3) != null) {
-                        if (event.player.isSneaking() && event.player.fallDistance <= NBTStuff.SkillAgilityLVL * Config.BaseStatModifier) {
+                        if (event.player.isSneaking() && event.player.fallDistance <= NBTHandler.SkillAgilityLVL * Config.BaseStatModifier) {
                             event.setCanceled(true);
-                            NBTStuff.SkillAgilityXP = NBTStuff.SkillAgilityXP + XPGainPR;
+                            NBTHandler.SkillAgilityXP = NBTHandler.SkillAgilityXP + XPGainPR;
                         }
                     }
                 if (!Config.EnableAgilityReq) {
-                    if (event.player.fallDistance <= NBTStuff.SkillAgilityLVL * Config.BaseStatModifier) {
+                    if (event.player.fallDistance <= NBTHandler.SkillAgilityLVL * Config.BaseStatModifier) {
                         if (event.player.isSneaking())
                             event.setCanceled(true);
-                            NBTStuff.SkillAgilityXP = NBTStuff.SkillAgilityXP + XPGainPR;
+                            NBTHandler.SkillAgilityXP = NBTHandler.SkillAgilityXP + XPGainPR;
                         if (!event.player.isSneaking())
                             event.setCanceled(false);
-                            NBTStuff.SkillAgilityXP = NBTStuff.SkillAgilityXP + XPGainPF;
+                            NBTHandler.SkillAgilityXP = NBTHandler.SkillAgilityXP + XPGainPF;
                     }
                     else{
-                        NBTStuff.SkillAgilityXP = NBTStuff.SkillAgilityXP - Config.XPRate;
-                        if (NBTStuff.SkillAgilityLVL >= 100){
-                            float dmg = event.player.fallDistance - NBTStuff.SkillAgilityLVL;
+                        NBTHandler.SkillAgilityXP = NBTHandler.SkillAgilityXP - Config.XPRate;
+                        if (NBTHandler.SkillAgilityLVL >= 100){
+                            float dmg = event.player.fallDistance - NBTHandler.SkillAgilityLVL;
                             float Damage = dmg * -1;
                             event.setCanceled(true);
                             player.heal(Damage);
@@ -89,15 +85,15 @@ public class Events implements EventListener {
                 }
 
         if (event.type.equals(DamageSource.magic) || event.type.equals(DamageSource.wither) && (event.player != null) && !player.worldObj.isRemote && Config.ImunityToPoisonSkillEnable){
-            if (!player.capabilities.isCreativeMode && event.player.fallDistance <= NBTStuff.SkillImmuneLVL * Config.BaseStatModifier) {
-                if (NBTStuff.SkillImmuneLVL >= 1000)
+            if (!player.capabilities.isCreativeMode && event.player.fallDistance <= NBTHandler.SkillImmuneLVL * Config.BaseStatModifier) {
+                if (NBTHandler.SkillImmuneLVL >= 1000)
                     event.setCanceled(true);
                 else
                     event.setCanceled(false);
-                    if (NBTStuff.SkillImmuneLVL >= 25) {
-                        player.addPotionEffect(new PotionEffect(Potion.regeneration.id, NBTStuff.SkillImmuneLVL / 250, 2));
+                    if (NBTHandler.SkillImmuneLVL >= 25) {
+                        player.addPotionEffect(new PotionEffect(Potion.regeneration.id, NBTHandler.SkillImmuneLVL / 250, 2));
                         if (player.getActivePotionEffect(Potion.poison).getIsAmbient() || player.getActivePotionEffect(Potion.wither).getIsAmbient() || event.type.equals(DamageSource.magic))
-                        NBTStuff.SkillImmuneXP = NBTStuff.SkillImmuneXP + Config.XPRate *5;
+                        NBTHandler.SkillImmuneXP = NBTHandler.SkillImmuneXP + Config.XPRate *5;
                     }
             }
         }
