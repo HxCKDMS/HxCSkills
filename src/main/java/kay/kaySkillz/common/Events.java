@@ -5,6 +5,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
@@ -55,6 +56,8 @@ public class Events implements EventListener {
         int XPGainPF = Config.XPRate * 3;
         int XPGainPR = Config.XPRate * 5;
 
+
+
         if (event.type.equals(DamageSource.fall) && (event.player != null) && !player.worldObj.isRemote && Config.AgilitySkillEnable)
             if (!player.capabilities.isCreativeMode)
                 if (Config.EnableAgilityReq)
@@ -69,6 +72,7 @@ public class Events implements EventListener {
                         if (event.player.isSneaking())
                             event.setCanceled(true);
                             NBTHandler.SkillAgilityXP = NBTHandler.SkillAgilityXP + XPGainPR;
+                            System.out.println(NBTHandler.SkillAgilityXP);
                         if (!event.player.isSneaking())
                             event.setCanceled(false);
                             NBTHandler.SkillAgilityXP = NBTHandler.SkillAgilityXP + XPGainPF;
@@ -93,9 +97,16 @@ public class Events implements EventListener {
                     if (NBTHandler.SkillImmuneLVL >= 25) {
                         player.addPotionEffect(new PotionEffect(Potion.regeneration.id, NBTHandler.SkillImmuneLVL / 250, 2));
                         if (player.getActivePotionEffect(Potion.poison).getIsAmbient() || player.getActivePotionEffect(Potion.wither).getIsAmbient() || event.type.equals(DamageSource.magic))
-                        NBTHandler.SkillImmuneXP = NBTHandler.SkillImmuneXP + Config.XPRate *5;
+                        NBTHandler.SkillImmuneXP = (int) (NBTHandler.SkillImmuneXP + Config.XPRate * 0.1);
                     }
             }
         }
+    }
+    public static void BloodDestruction(EntityPlayerMP Player){
+
+        Player.worldObj.spawnParticle("instantSpell", Player.posX + Math.random(), Player.posY + Math.random(), Player.posZ + Math.random(), 0, 0, 0);
+        Player.worldObj.createExplosion(Player, Player.posX, Player.posY, Player.posZ, 10, true);
+        Player.worldObj.playSoundEffect(1, 1, 1, "mob.wither.spawn", 1, 1);
+
     }
 }

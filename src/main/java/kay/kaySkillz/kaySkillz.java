@@ -7,13 +7,11 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import kay.kayXEnchants.common.Config;
-import kay.kayXEnchants.common.Events;
-import kay.kayXEnchants.enchantment.*;
-import kay.kayXEnchants.lib.Reference;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
+import kay.kaySkillz.common.Events;
+import kay.kaySkillz.common.KeybindHandler;
+import kay.kaySkillz.common.NBTHandler;
+import kay.kaySkillz.lib.Reference;
+import kay.kaySkillz.common.Config;
 import net.minecraftforge.common.config.Configuration;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
@@ -30,8 +28,9 @@ public class kaySkillz
     public void preinit(FMLPreInitializationEvent event)
     {
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
-        events = new Events();
         FMLCommonHandler.instance().bus().register(new Events());
+        FMLCommonHandler.instance().bus().register(new KeybindHandler());
+        FMLCommonHandler.instance().bus().register(new NBTHandler());
     }
     @EventHandler
     public void init(FMLInitializationEvent event)
