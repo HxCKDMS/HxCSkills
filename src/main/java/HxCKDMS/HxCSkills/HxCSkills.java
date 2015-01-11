@@ -1,39 +1,36 @@
 package HxCKDMS.HxCSkills;
 
-import HxCKDMS.HxCSkills.Events.Events;
+import HxCKDMS.HxCSkills.Guis.GuiHandler;
 import HxCKDMS.HxCSkills.lib.Reference;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 
 public class HxCSkills
 {
-    @Instance(Reference.MOD_ID)
+    @Mod.Instance(Reference.MOD_ID)
     public static HxCSkills instance;
 
     public static Config Config;
 
-    public static Events events;
-    @EventHandler
+    @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         Config = new Config(new Configuration(event.getSuggestedConfigurationFile()));
-        FMLCommonHandler.instance().bus().register(new Events());
     }
-    @EventHandler
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
         event.getModState();
     }
     
-    @EventHandler
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
         event.getModState();

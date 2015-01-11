@@ -17,13 +17,15 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-0.0.1"
+version = "1.8-1.4-BETA"
 group= "HxCKDMS.HxCSkills"
 archivesBaseName = "HxCSkills"
 
 minecraft {
-    version = "1.7.10-10.13.1.1217"
-    assetDir = "eclipse/assets"
+    version = "1.8-11.14.0.1285-1.8"
+    runDir = "eclipse"
+
+    mappings = "snapshot_nodoc_20141130"
 }
 
 dependencies {
@@ -31,7 +33,9 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      
+	
+    runtime files('libs/HxCCore-1.5.jar')
+	
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
@@ -40,6 +44,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+}
+
+jar {
+        manifest {
+        attributes 'FMLAT': 'accessTransformer.cfg'
+    }
 }
 
 processResources
