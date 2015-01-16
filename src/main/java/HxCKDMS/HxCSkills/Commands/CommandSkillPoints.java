@@ -12,12 +12,12 @@ import net.minecraft.util.ChatComponentText;
 import java.io.File;
 import java.util.List;
 
-public class CommandXPtoSP implements ISubCommand {
-    public static CommandXPtoSP instance = new CommandXPtoSP();
+public class CommandSkillPoints implements ISubCommand {
+    public static CommandSkillPoints instance = new CommandSkillPoints();
 
     @Override
     public String getName() {
-        return "XPtoSP";
+        return "SP";
     }
 
     @Override
@@ -30,19 +30,7 @@ public class CommandXPtoSP implements ISubCommand {
         NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
 
         int SavedSkillPoints = Skills.getInteger("SkillPoints");
-
-        int xpl = player.experienceLevel;
-        int SkillPoints = SavedSkillPoints;
-
-        if (xpl > 5){
-            player.removeExperienceLevel(5);
-            ++SkillPoints;
-            Skills.setInteger("SkillPoints", SkillPoints);
-            player.addChatMessage(new ChatComponentText("\u00A79You have gained a skill point!"));
-        }else{
-            player.addChatMessage(new ChatComponentText("\u00A74You don't have enough XP levels"));
-        }
-        NBTFileIO.setNbtTagCompound(CustomPlayerData, "skills", Skills);
+        player.addChatMessage(new ChatComponentText("\u00A73You have " + SavedSkillPoints + " Skill Points!"));
     }
 
     @Override

@@ -1,12 +1,12 @@
 [
   {
     "modid": "HxCSkills",
-    "name": "§3DrZed's §9Skills§r",
+    "name": "HxC Skills",
     "description": "Adds Skills to MC ^_^",
     "version": "Alpha 1.0",
     "credits": "Oky for Idea of mod",
-    "mcversion": "1.7.10",
-    "authors": ["§4HxCK§3D§eM§0S§r"],
+    "mcversion": "1.8",
+    "authors": ["ï¿½4HxCKï¿½3Dï¿½eMï¿½0Sï¿½r"],
     "dependencies": [
            "mod_MinecraftForge"
     ]

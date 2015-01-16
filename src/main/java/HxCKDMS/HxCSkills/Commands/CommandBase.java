@@ -1,5 +1,6 @@
 package HxCKDMS.HxCSkills.Commands;
 
+import HxCKDMS.HxCCore.Commands.ISubCommand;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.command.CommandException;
@@ -16,7 +17,9 @@ public class CommandBase extends net.minecraft.command.CommandBase {
     private static TMap<String, ISubCommand> commands = new THashMap<String, ISubCommand>();
     
     static {
+        registerSubCommand(CommandHelp.instance);
         registerSubCommand(CommandXPtoSP.instance);
+        registerSubCommand(CommandSkillPoints.instance);
     }
     
     public static void initCommands(FMLServerStartingEvent event) {
