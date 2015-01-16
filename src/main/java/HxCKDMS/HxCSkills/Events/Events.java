@@ -20,6 +20,8 @@ import java.util.UUID;
 public class Events {
 
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
+    public static UUID SpeedUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cbb");
+    public static UUID DamageUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cbc");
     String pUUID;
     File CustomPlayerData;
     NBTTagCompound Skills;
@@ -28,6 +30,8 @@ public class Events {
     int HSpeed = Config.HealSpeed;
     int HTimer;
 
+    double Speed;
+    double Damage;
 
     int SkillPoints;
 
@@ -65,15 +69,34 @@ public class Events {
         Health = Skills.getInteger("Health");
         Stamina = Skills.getInteger("Stamina");
     }
-
+    @SubscribeEvent
     public void LivingUpdateEvent(LivingEvent.LivingUpdateEvent event){
         if (event.entityLiving instanceof EntityPlayerMP){
             EntityPlayerMP ePlayer = (EntityPlayerMP)event.entityLiving;
+
             IAttributeInstance ph = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+            IAttributeInstance ps = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+            IAttributeInstance pd = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage);
+
+            if (StrengthLegs > 0){
+                Speed = (ps.getBaseValue() + ((StrengthLegs/5)*.15));
+            }
+            if (StrengthArms > 0){
+                Damage = (pd.getBaseValue() + ((StrengthArms)*.15));
+            }
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthSkill", Health, 1);
+            AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "LegStrengthSkill", Speed, 1);
+            AttributeModifier DamageBuff = new AttributeModifier(DamageUUID, "ArmStrengthSkill", Damage, 1);
+
             ph.removeModifier(HealthBuff);
+            ps.removeModifier(SpeedBuff);
+            pd.removeModifier(DamageBuff);
+
             ph.applyModifier(HealthBuff);
+            ps.applyModifier(SpeedBuff);
+            pd.applyModifier(DamageBuff);
+
             if (Health > 15 && ePlayer.getHealth() < ePlayer.getMaxHealth()){
                 int H1 = Math.round(Health/15);
                 if (HTimer <= 0){
@@ -88,54 +111,30 @@ public class Events {
             EntityPlayerMP playerMP = (EntityPlayerMP)event.entityLiving;
             double dmg = 0;
             double pwr = (((StrengthFeet + StrengthLegs) * 0.3) + 1);
-            int p = Math.round((float)pwr);
-            switch (p) {
-                case 1: dmg = 0.95;
-                    break;
-                case 2: dmg = 0.9;
-                    break;
-                case 3: dmg = 0.85;
-                    break;
-                case 4: dmg = 0.8;
-                    break;
-                case 5: dmg = 0.75;
-                    break;
-                case 6: dmg = 0.7;
-                    break;
-                case 7: dmg = 0.65;
-                    break;
-                case 8: dmg = 0.6;
-                    break;
-                case 9: dmg = 0.55;
-                    break;
-                case 10: dmg = 0.50;
-                    break;
-                case 11: dmg = 0.45;
-                    break;
-                case 12: dmg = 0.4;
-                    break;
-                case 13: dmg = 0.35;
-                    break;
-                case 14: dmg = 0.3;
-                    break;
-                case 15: dmg = 0.25;
-                    break;
-                case 16: dmg = 0.2;
-                    break;
-                case 17: dmg = 0.15;
-                    break;
-                case 18: dmg = 0.1;
-                    break;
-                case 19: dmg = 0.05;
-                    break;
-                case 20: dmg = 0.025;
-                    break;
-                default: dmg = 1;
-                    break;
+            double sneakmod = 0;
+            if (playerMP.isSneaking()){
+                sneakmod = 0.50;
             }
-            double fdmg = event.damageMultiplier - dmg;
-            event.damageMultiplier = (float)fdmg;
-            System.out.println(event.damageMultiplier + fdmg);
+            int p = Math.round((float)pwr);
+            if (0 > p && p < 21){
+                dmg = (-0.05*p)+1;
+            }else{
+                dmg = 1;
+            }
+            double fdmg = (event.damageMultiplier - dmg)-sneakmod;
+            if (fdmg < 0) {
+                event.damageMultiplier = 0;
+            }else{
+                event.damageMultiplier = (float)fdmg;
+            }
+        }
+    }
+    @SubscribeEvent
+    public void LivingJumpEvent(LivingEvent.LivingJumpEvent event){
+        if (event.entityLiving instanceof EntityPlayer && StrengthLegs >= 5) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            double JumpBuff = player.motionY + 0.1 * (StrengthLegs/5);
+            player.motionY += JumpBuff;
         }
     }
 }
