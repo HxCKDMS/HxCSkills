@@ -51,6 +51,11 @@ public class CommandStats implements ISubCommand {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
+    }
+
+    @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         return null;
     }
