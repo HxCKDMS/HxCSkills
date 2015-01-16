@@ -20,10 +20,18 @@ public class CommandBase extends net.minecraft.command.CommandBase {
         registerSubCommand(CommandHelp.instance);
         registerSubCommand(CommandXPtoSP.instance);
         registerSubCommand(CommandSkillPoints.instance);
+        registerSubCommand(CommandAddPoint.instance);
+        registerSubCommand(CommandStats.instance);
     }
     
     public static void initCommands(FMLServerStartingEvent event) {
         event.registerServerCommand(instance);
+    }
+
+    @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 4;
     }
 
     @Override

@@ -16,7 +16,13 @@ public class CommandHelp implements ISubCommand {
     public String getName() {
         return "help";
     }
-    
+
+    @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+
     @Override
     public void execute(ICommandSender sender, String[] args) throws CommandException {
         sender.addChatMessage(new ChatComponentText("\u00A71Commands:"));
@@ -36,8 +42,10 @@ public class CommandHelp implements ISubCommand {
     
     /** TODO: THESE SHOULD ALL BE LOADED FROM A LANGUAGE FILE **/
     private static final String[] LINES = {
-            "NOTE: These commands are temporary until we move to GUI system",
+            "NOTE: These commands are temporary until we move to GUI system.",
             "/HxCSkills help: shows all commands with explanation.",
-            "/HxCSkills XPtoSP: used to convert 5 levels XP to 1 Skillpoint",
+            "/HxCSkills XPtoSP [SkillPoints]: used to convert XP to Skillpoints, [SkillPoints] # to create from xp.",
+            "/HxCSkills AP <Skill> [Levels]: Used to exchange skill points for skill levels.",
+            "/HxCSkills Stats: used to list your current Skill Levels.",
     };
 }

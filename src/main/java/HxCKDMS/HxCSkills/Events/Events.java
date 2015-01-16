@@ -2,6 +2,10 @@ package HxCKDMS.HxCSkills.Events;
 
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
+import HxCKDMS.HxCSkills.Config;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,12 +15,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
+import java.util.UUID;
 
 public class Events {
-    String UUID;
+
+    public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
+    String pUUID;
     File CustomPlayerData;
     NBTTagCompound Skills;
     EntityPlayer player;
+
+    int HSpeed = Config.HealSpeed;
+    int HTimer;
+
 
     int SkillPoints;
 
@@ -32,13 +43,16 @@ public class Events {
 
     @SubscribeEvent
     public void PlayerTickEvent(TickEvent.PlayerTickEvent event){
+        if (HTimer != 0) {
+            --HTimer;
+        }
         player = event.player;
         SetData(player);
     }
 
     public void SetData(EntityPlayer player){
-        UUID = player.getUniqueID().toString();
-        CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+        pUUID = player.getUniqueID().toString();
+        CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + pUUID + ".dat");
         Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
         SkillPoints = Skills.getInteger("SkillPoints");
 
@@ -55,7 +69,17 @@ public class Events {
     public void LivingUpdateEvent(LivingEvent.LivingUpdateEvent event){
         if (event.entityLiving instanceof EntityPlayerMP){
             EntityPlayerMP ePlayer = (EntityPlayerMP)event.entityLiving;
+            IAttributeInstance ph = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
 
+            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthSkill", Health, 1);
+            ph.removeModifier(HealthBuff);
+            ph.applyModifier(HealthBuff);
+            if (Health > 15 && ePlayer.getHealth() < ePlayer.getMaxHealth()){
+                int H1 = Math.round(Health/15);
+                if (HTimer <= 0){
+                    HTimer = Math.round((float)(HSpeed/H1));
+                }
+            }
         }
     }
     @SubscribeEvent
@@ -105,6 +129,8 @@ public class Events {
                 case 19: dmg = 0.05;
                     break;
                 case 20: dmg = 0.025;
+                    break;
+                default: dmg = 1;
                     break;
             }
             double fdmg = event.damageMultiplier - dmg;

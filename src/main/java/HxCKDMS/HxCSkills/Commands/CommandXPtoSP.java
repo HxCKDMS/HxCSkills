@@ -22,6 +22,12 @@ public class CommandXPtoSP implements ISubCommand {
     }
 
     @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+
+    @Override
     public void execute(ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP player = (EntityPlayerMP)sender;
         String UUID = player.getUniqueID().toString();
@@ -32,18 +38,23 @@ public class CommandXPtoSP implements ISubCommand {
 
         int SavedSkillPoints = Skills.getInteger("SkillPoints");
 
+        int SPAdded = 1;
+        if (args.length >= 2) {
+            SPAdded = Integer.parseInt(args[1]);
+        }
+
         int XPLevels = player.experienceLevel;
-        int XPLevelsRequired = Config.Difficulty;
+        int XPLevelsRequired = Config.Difficulty*SPAdded;
         int SkillPoints = SavedSkillPoints;
 
-        if (XPLevels > XPLevelsRequired){
+        if (XPLevels > XPLevelsRequired) {
             player.removeExperienceLevel(XPLevelsRequired);
-            ++SkillPoints;
-            player.playSound("orb", 1, 0.5f);
+            SkillPoints += SPAdded;
+            player.playSound("random.orb", 1, 1);
             Skills.setInteger("SkillPoints", SkillPoints);
-            player.addChatMessage(new ChatComponentText("\u00A79You have gained a skill point!"));
-        }else{
-            player.addChatMessage(new ChatComponentText("\u00A74You don't have enough XP levels"));
+            player.addChatMessage(new ChatComponentText("\u00A79You have gained " + SPAdded + " skill point(s)!"));
+        } else {
+            player.addChatMessage(new ChatComponentText("\u00A74You don't have enough XP levels. " + (XPLevelsRequired - XPLevels) + " more xp levels needed!"));
         }
         NBTFileIO.setNbtTagCompound(CustomPlayerData, "skills", Skills);
     }
