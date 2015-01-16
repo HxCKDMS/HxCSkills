@@ -1,8 +1,10 @@
 package HxCKDMS.HxCSkills;
 
 import HxCKDMS.HxCSkills.Commands.CommandBase;
+import HxCKDMS.HxCSkills.Events.Events;
 import HxCKDMS.HxCSkills.Guis.GuiHandler;
 import HxCKDMS.HxCSkills.lib.Reference;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -30,6 +32,7 @@ public class HxCSkills
     public void init(FMLInitializationEvent event)
     {
         event.getModState();
+        MinecraftForge.EVENT_BUS.register(new Events());
     }
     @Mod.EventHandler
     public void serverStart(FMLServerStartingEvent event){

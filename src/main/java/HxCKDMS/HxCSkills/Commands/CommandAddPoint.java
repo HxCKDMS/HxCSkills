@@ -3,7 +3,6 @@ package HxCKDMS.HxCSkills.Commands;
 import HxCKDMS.HxCCore.Commands.ISubCommand;
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
-import HxCKDMS.HxCSkills.Config;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,12 +12,12 @@ import net.minecraft.util.ChatComponentText;
 import java.io.File;
 import java.util.List;
 
-public class CommandXPtoSP implements ISubCommand {
-    public static CommandXPtoSP instance = new CommandXPtoSP();
+public class CommandAddPoint implements ISubCommand {
+    public static CommandAddPoint instance = new CommandAddPoint();
 
     @Override
     public String getName() {
-        return "XPtoSP";
+        return "AP";
     }
 
     @Override
@@ -32,20 +31,18 @@ public class CommandXPtoSP implements ISubCommand {
 
         int SavedSkillPoints = Skills.getInteger("SkillPoints");
 
-        int XPLevels = player.experienceLevel;
-        int XPLevelsRequired = Config.Difficulty;
-        int SkillPoints = SavedSkillPoints;
-
-        if (XPLevels > XPLevelsRequired){
-            player.removeExperienceLevel(XPLevelsRequired);
-            ++SkillPoints;
-            player.playSound("orb", 1, 0.5f);
-            Skills.setInteger("SkillPoints", SkillPoints);
-            player.addChatMessage(new ChatComponentText("\u00A79You have gained a skill point!"));
+        String SkillToLevel;
+        String HowManyLevels;
+        if (args.length == 1){
+            SkillToLevel = args[1];
+        }else if(args.length == 2){
+            SkillToLevel = args[1];
+            HowManyLevels = args[2];
         }else{
-            player.addChatMessage(new ChatComponentText("\u00A74You don't have enough XP levels"));
+            player.addChatMessage(new ChatComponentText("/HxCSkills AP <Skill> [Levels]"));
+            player.addChatMessage(new ChatComponentText("The number of levels isn't required."));
         }
-        NBTFileIO.setNbtTagCompound(CustomPlayerData, "skills", Skills);
+
     }
 
     @Override
