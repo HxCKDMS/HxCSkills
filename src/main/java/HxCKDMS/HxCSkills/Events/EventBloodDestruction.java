@@ -35,10 +35,9 @@ public class EventBloodDestruction {
         float curhp = player.getHealth();
         float dmghp = curhp - 1;
         player.setHealth(dmghp);
-        player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), 20, 100, true, false));
+        player.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 5, 100, true, false));
         player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 1f, true);
     }
     public void DeactivateBloodDestruction(EntityPlayer player){
-
     }
 }

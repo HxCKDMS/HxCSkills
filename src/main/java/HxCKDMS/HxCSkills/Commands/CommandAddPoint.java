@@ -48,7 +48,7 @@ public class CommandAddPoint implements ISubCommand {
         int FlySkillLevel = Skills.getInteger("FlyLevel");
 
         int TargetSkill;
-        int HML = 0;
+        int HML = 1;
 
         //N%@ New % @ (%=W Whatever||@=S Strength or L Level)
         int NAS;

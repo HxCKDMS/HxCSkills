@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
 import java.util.UUID;
@@ -22,84 +21,74 @@ public class Events {
     public static UUID HealthUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cba");
     public static UUID SpeedUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cbb");
     public static UUID DamageUUID = UUID.fromString("fe15f490-62d7-11e4-b116-123b93f75cbc");
-    String pUUID;
-    File CustomPlayerData;
-    NBTTagCompound Skills;
-    EntityPlayer player;
 
     int HSpeed = Config.HealSpeed;
     int HTimer;
 
     double Speed;
     double Damage;
-
-    int SkillPoints;
-
-    //skill levels
-    int StrengthArms;
-    int StrengthLegs;
-    int StrengthFeet;
-    int StrengthTorso;
-    int StrengthHead;
-
-    int Health;
-    int Stamina;
+    double HPBuff;
 
     @SubscribeEvent
-    public void PlayerTickEvent(TickEvent.PlayerTickEvent event){
+    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
         if (HTimer != 0) {
             --HTimer;
+//            System.out.println(HTimer);
         }
-        player = event.player;
-        SetData(player);
-    }
 
-    public void SetData(EntityPlayer player){
-        pUUID = player.getUniqueID().toString();
-        CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + pUUID + ".dat");
-        Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
-        SkillPoints = Skills.getInteger("SkillPoints");
-
-        StrengthArms = Skills.getInteger("ArmStrength");
-        StrengthLegs = Skills.getInteger("LegStrength");
-        StrengthFeet = Skills.getInteger("FootStrength");
-        StrengthTorso = Skills.getInteger("TorsoStrength");
-        StrengthHead = Skills.getInteger("HeadStrength");
-
-        Health = Skills.getInteger("Health");
-        Stamina = Skills.getInteger("Stamina");
-    }
-    @SubscribeEvent
-    public void LivingUpdateEvent(LivingEvent.LivingUpdateEvent event){
         if (event.entityLiving instanceof EntityPlayerMP){
-            EntityPlayerMP ePlayer = (EntityPlayerMP)event.entityLiving;
+            EntityPlayerMP player = (EntityPlayerMP)event.entityLiving;
 
-            IAttributeInstance ph = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
-            IAttributeInstance ps = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
-            IAttributeInstance pd = ePlayer.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage);
+            String pUUID = player.getUniqueID().toString();
+            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + pUUID + ".dat");
+            NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
+            int SkillPoints = Skills.getInteger("SkillPoints");
+
+            int StrengthArms = Skills.getInteger("ArmStrengthLevel");
+            int StrengthLegs = Skills.getInteger("LegStrengthLevel");
+            int StrengthFeet = Skills.getInteger("FootStrengthLevel");
+            int StrengthTorso = Skills.getInteger("TorsoStrengthLevel");
+            int StrengthHead = Skills.getInteger("HeadStrengthLevel");
+
+            int Health = Skills.getInteger("HealthLevel");
+            int Stamina = Skills.getInteger("StaminaLevel");
+            int FlySkillLevel = Skills.getInteger("FlyLevel");
+
+            IAttributeInstance playerhp = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+            IAttributeInstance playerspeed = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+            IAttributeInstance playerstrength = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage);
 
             if (StrengthLegs > 0){
-                Speed = (ps.getBaseValue() + ((StrengthLegs/5)*.15));
+                Speed = (playerspeed.getBaseValue() + ((StrengthLegs/5)*.15));
             }
             if (StrengthArms > 0){
-                Damage = (pd.getBaseValue() + ((StrengthArms)*.15));
+                Damage = (playerstrength.getBaseValue() + ((StrengthArms)*.15));
             }
 
-            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthSkill", Health, 1);
+            if (Health > 0 && Health <= HxCKDMS.HxCCore.Config.HPMax){
+                HPBuff = Health/5;
+            }else{
+                HPBuff = 100;
+            }
+
+            AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthSkill", HPBuff, 1);
             AttributeModifier SpeedBuff = new AttributeModifier(SpeedUUID, "LegStrengthSkill", Speed, 1);
             AttributeModifier DamageBuff = new AttributeModifier(DamageUUID, "ArmStrengthSkill", Damage, 1);
 
-            ph.removeModifier(HealthBuff);
-            ps.removeModifier(SpeedBuff);
-            pd.removeModifier(DamageBuff);
+            playerhp.removeModifier(HealthBuff);
+            playerspeed.removeModifier(SpeedBuff);
+            playerstrength.removeModifier(DamageBuff);
 
-            ph.applyModifier(HealthBuff);
-            ps.applyModifier(SpeedBuff);
-            pd.applyModifier(DamageBuff);
+            playerhp.applyModifier(HealthBuff);
+            playerspeed.applyModifier(SpeedBuff);
+            playerstrength.applyModifier(DamageBuff);
 
-            if (Health > 15 && ePlayer.getHealth() < ePlayer.getMaxHealth()){
+            player.sendPlayerAbilities();
+
+            if (Health > 15 && player.getHealth() < player.getMaxHealth()){
                 int H1 = Math.round(Health/15);
                 if (HTimer <= 0){
+                    player.heal(2);
                     HTimer = Math.round((float)(HSpeed/H1));
                 }
             }
@@ -109,6 +98,13 @@ public class Events {
     public void LivingFallEvent(LivingFallEvent event){
         if (event.entityLiving instanceof EntityPlayerMP){
             EntityPlayerMP playerMP = (EntityPlayerMP)event.entityLiving;
+
+            String pUUID = playerMP.getUniqueID().toString();
+            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + pUUID + ".dat");
+            NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
+            int StrengthLegs = Skills.getInteger("LegStrength");
+            int StrengthFeet = Skills.getInteger("FootStrength");
+
             double dmg = 0;
             double pwr = (((StrengthFeet + StrengthLegs) * 0.3) + 1);
             double sneakmod = 0;
@@ -131,10 +127,18 @@ public class Events {
     }
     @SubscribeEvent
     public void LivingJumpEvent(LivingEvent.LivingJumpEvent event){
-        if (event.entityLiving instanceof EntityPlayer && StrengthLegs >= 5) {
+        if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;
-            double JumpBuff = player.motionY + 0.1 * (StrengthLegs/5);
-            player.motionY += JumpBuff;
+
+            String pUUID = player.getUniqueID().toString();
+            File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + pUUID + ".dat");
+            NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
+            int StrengthLegs = Skills.getInteger("LegStrength");
+
+            if (StrengthLegs > 5) {
+                double JumpBuff = player.motionY + 0.1 * (StrengthLegs / 5);
+                player.motionY += JumpBuff;
+            }
         }
     }
 }
