@@ -100,7 +100,7 @@ public class Events {
             }
 
             if (Health > 0 && Health <= HxCKDMS.HxCCore.Config.HPMax/10){
-                HPBuff = Health*0.1;
+                HPBuff = Health;
             }else if (Health > HxCKDMS.HxCCore.Config.HPMax) {
                 HPBuff = 10;
             }else{
