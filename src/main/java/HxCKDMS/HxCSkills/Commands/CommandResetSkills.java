@@ -29,12 +29,12 @@ public class CommandResetSkills implements ISubCommand {
         EntityPlayerMP player = (EntityPlayerMP)sender;
         String UUID = player.getUniqueID().toString();
 
-        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+        File CustomPlayerData = new File(HxCKDMS.HxCSkills.HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
 
         if (args.length >= 2){
             EntityPlayerMP player2 = CommandBase.getPlayer(sender, args[1]);
             String P2UUID = player2.getUniqueID().toString();
-            CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + P2UUID + ".dat");
+            CustomPlayerData = new File(HxCKDMS.HxCSkills.HxCCore.HxCCoreDir, "HxC-" + P2UUID + ".dat");
         }
 
         NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");

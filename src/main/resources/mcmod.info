@@ -3,10 +3,10 @@
     "modid": "HxCSkills",
     "name": "HxC Skills",
     "description": "Adds Skills to MC ^_^",
-    "version": "Alpha 1.0",
+    "version": "1.6-BETA",
     "credits": "Oky for Idea of mod",
     "mcversion": "1.8",
-    "authors": ["�4HxCK�3D�eM�0S�r"],
+    "authors": ["HxCKDMS"],
     "dependencies": [
            "mod_MinecraftForge"
     ]

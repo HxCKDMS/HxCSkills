@@ -34,7 +34,7 @@ dependencies {
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
 	
-    runtime files('libs/HxCCore-1.5.jar')
+    runtime files('libs/HxCCore-1.6.jar')
 	
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
