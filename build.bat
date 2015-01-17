@@ -1,1 +1,2 @@
-gradle build
+gradle build --stacktrace --info
+pause

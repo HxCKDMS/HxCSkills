@@ -12,7 +12,7 @@ import java.io.File;
 public class EventBloodDestruction {
     public void BloodDestruction(EntityPlayer player){
         String UUID = player.getUniqueID().toString();
-        File CustomPlayerData = new File(HxCKDMS.HxCSkills.HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
         NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
         int Torso = Skills.getInteger("TorsoStrengthLevel");
         int Arms = Skills.getInteger("ArmStrengthLevel");

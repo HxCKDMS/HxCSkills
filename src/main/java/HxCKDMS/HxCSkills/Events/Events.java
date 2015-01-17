@@ -101,7 +101,7 @@ public class Events {
 
             if (Health > 0 && Health <= HxCKDMS.HxCCore.Config.HPMax/10){
                 HPBuff = Health*0.1;
-            }else if (Health > 0 && Health > HxCKDMS.HxCCore.Config.HPMax/10) {
+            }else if (Health > HxCKDMS.HxCCore.Config.HPMax/10) {
                 HPBuff = 10;
             }else{
                 HPBuff = 0;
@@ -145,10 +145,9 @@ public class Events {
             player.sendPlayerAbilities();
 
             if (Health > 15 && player.getHealth() < player.getMaxHealth()){
-                int H1 = Math.round(Health/15);
                 if (HTimer <= 0){
                     player.heal(2);
-                    HTimer = Math.round((float)(HSpeed/H1));
+                    HTimer = (HSpeed-Health);
                 }
             }
 

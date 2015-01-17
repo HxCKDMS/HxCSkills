@@ -32,7 +32,7 @@ public class CommandAddPoint implements ISubCommand {
         EntityPlayerMP player = (EntityPlayerMP)sender;
         String UUID = player.getUniqueID().toString();
 
-        File CustomPlayerData = new File(HxCKDMS.HxCSkills.HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
 
         NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
 
