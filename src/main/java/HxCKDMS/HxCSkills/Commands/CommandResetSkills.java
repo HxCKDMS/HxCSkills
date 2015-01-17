@@ -49,6 +49,9 @@ public class CommandResetSkills implements ISubCommand {
         Skills.setInteger("StaminaLevel", 0);
         Skills.setInteger("FlyLevel", 0);
 
+        player.capabilities.allowFlying = false;
+        player.capabilities.isFlying = false;
+
         NBTFileIO.setNbtTagCompound(CustomPlayerData, "skills", Skills);
     }
 

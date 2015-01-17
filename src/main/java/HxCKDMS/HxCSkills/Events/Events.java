@@ -103,11 +103,8 @@ public class Events {
                 HPBuff = 0;
             }
 
-            if (FlySkillLevel > 0) {
-                player.capabilities.allowFlying = true;
-            }else{
-                player.capabilities.allowFlying = false;
-                player.capabilities.isFlying = false;
+            if (!player.capabilities.allowFlying) {
+                player.capabilities.allowFlying = FlySkillLevel>0;
             }
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthSkill", HPBuff, 1);
