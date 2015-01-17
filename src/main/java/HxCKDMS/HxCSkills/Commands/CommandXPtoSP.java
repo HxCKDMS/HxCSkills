@@ -47,7 +47,7 @@ public class CommandXPtoSP implements ISubCommand {
         int XPLevelsRequired = Config.Difficulty*SPAdded;
         int SkillPoints = SavedSkillPoints;
 
-        if (XPLevels >= XPLevelsRequired) {
+        if (XPLevels >= XPLevelsRequired || player.capabilities.isCreativeMode) {
             player.removeExperienceLevel(XPLevelsRequired);
             SkillPoints += SPAdded;
             player.playSound("random.orb", 1, 1);

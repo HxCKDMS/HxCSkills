@@ -86,7 +86,7 @@ public class CommandAddPoint implements ISubCommand {
             }else if (SkillToLevel.equalsIgnoreCase("stamina")){
                 TargetSkill = 7;
             }else if (SkillToLevel.equalsIgnoreCase("fly") && Config.FlySkillEnable){
-                if (SavedSkillPoints >= 25*HML) {
+                if (SavedSkillPoints >= 25*HML || player.capabilities.isCreativeMode) {
                     TargetSkill = 8;
                 }else{
                     TargetSkill = 0;
@@ -100,7 +100,7 @@ public class CommandAddPoint implements ISubCommand {
                 player.addChatMessage(new ChatComponentText("Current compatible arguments are: Fly, LegStrength, TorsoStrength, HeadStrength, FeetStrength, Health, Stamina."));
             }
 
-            if (TargetSkill != 0 && HML <= SavedSkillPoints){
+            if (TargetSkill != 0 && (HML <= SavedSkillPoints || player.capabilities.isCreativeMode)){
                 switch (TargetSkill){
                     case 1:
                         NAS = ArmStrength + HML;

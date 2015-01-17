@@ -38,6 +38,7 @@ public class CommandStats implements ISubCommand {
         int FeetStrength = Skills.getInteger("FeetStrengthLevel");
         int Health = Skills.getInteger("HealthLevel");
         int Stamina = Skills.getInteger("StaminaLevel");
+        int FlyLevel = Skills.getInteger("FlyLevel");
 
         player.addChatMessage(new ChatComponentText("\u00A7b\u00A76     \u00A7nSTATS"));
         player.addChatMessage(new ChatComponentText("\u00A71Skill Points: " + SavedSkillPoints));
@@ -48,6 +49,7 @@ public class CommandStats implements ISubCommand {
         player.addChatMessage(new ChatComponentText("\u00A73FeetStrength: " + FeetStrength));
         player.addChatMessage(new ChatComponentText("\u00A79Health: " + Health));
         player.addChatMessage(new ChatComponentText("\u00A73Stamina: " + Stamina));
+        player.addChatMessage(new ChatComponentText("\u00A79Fly Level: " + FlyLevel));
     }
 
     @Override
