@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,6 +27,7 @@ public class Events {
 
     int HSpeed = Config.HealSpeed;
     int HTimer;
+    int FTimer;
 
     double Speed;
     double Damage;
@@ -45,7 +47,9 @@ public class Events {
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
         if (HTimer != 0) {
             --HTimer;
-//            System.out.println(HTimer);
+        }
+        if (FTimer != 0) {
+            --FTimer;
         }
 
         if (event.entityLiving instanceof EntityPlayerMP){
@@ -105,6 +109,25 @@ public class Events {
 
             if (!player.capabilities.allowFlying) {
                 player.capabilities.allowFlying = FlySkillLevel>0;
+            }
+
+            if (StrengthHead >= 10 && !(player.worldObj.canSeeSky(new BlockPos(player.posX, player.posY, player.posZ))) && (player.worldObj.getLight(new BlockPos(player.posX, player.posY, player.posZ)) == 0)) {
+                player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 60, 0, false, false));
+            }
+
+            if (StrengthArms >= 5) {
+                int Haste = Math.round((float)(StrengthArms/5));
+                player.addPotionEffect(new PotionEffect(Potion.digSpeed.getId(), 5, Haste-1, false, false));
+            }
+
+            if (Stamina >= 5) {
+                int dt = 120;
+                int fud = Math.round((float)(Stamina/25));
+                int FudT = Math.round((float)(dt/fud));
+                if (FTimer <= 0) {
+                    player.addPotionEffect(new PotionEffect(Potion.saturation.getId(), 1, fud-1, false, false));
+                    FTimer = FudT;
+                }
             }
 
             AttributeModifier HealthBuff = new AttributeModifier(HealthUUID, "HealthSkill", HPBuff, 1);
