@@ -99,9 +99,9 @@ public class Events {
                 Damage = 0;
             }
 
-            if (Health > 0 && Health <= HxCKDMS.HxCCore.Config.HPMax){
+            if (Health > 0 && Health <= HxCKDMS.HxCCore.Configs.Config.HPMax){
                 HPBuff = Health*0.1;
-            }else if (Health > HxCKDMS.HxCCore.Config.HPMax) {
+            }else if (Health > HxCKDMS.HxCCore.Configs.Config.HPMax) {
                 HPBuff = 10;
             }else{
                 HPBuff = 0;

@@ -32,7 +32,7 @@ public class CommandBase extends net.minecraft.command.CommandBase {
     @Override
     public int getRequiredPermissionLevel()
     {
-        return 4;
+        return 0;
     }
 
     @Override

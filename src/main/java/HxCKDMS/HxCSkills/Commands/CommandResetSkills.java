@@ -19,13 +19,7 @@ public class CommandResetSkills implements ISubCommand {
     }
 
     @Override
-    public int getRequiredPermissionLevel()
-    {
-        return 4;
-    }
-
-    @Override
-    public void execute(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(ICommandSender sender, String[] args) throws PlayerNotFoundException {
         EntityPlayerMP player = (EntityPlayerMP)sender;
         String UUID = player.getUniqueID().toString();
 

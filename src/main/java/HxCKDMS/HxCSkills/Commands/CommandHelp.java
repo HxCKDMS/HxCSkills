@@ -1,7 +1,6 @@
 package HxCKDMS.HxCSkills.Commands;
 
 import HxCKDMS.HxCCore.Commands.ISubCommand;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -18,13 +17,7 @@ public class CommandHelp implements ISubCommand {
     }
 
     @Override
-    public int getRequiredPermissionLevel()
-    {
-        return 0;
-    }
-
-    @Override
-    public void execute(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(ICommandSender sender, String[] args) {
         sender.addChatMessage(new ChatComponentText("\u00A71Commands:"));
         
         boolean b = false;

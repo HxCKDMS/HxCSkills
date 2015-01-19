@@ -3,7 +3,6 @@ package HxCKDMS.HxCSkills.Commands;
 import HxCKDMS.HxCCore.Commands.ISubCommand;
 import HxCKDMS.HxCCore.Handlers.NBTFileIO;
 import HxCKDMS.HxCCore.HxCCore;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +20,7 @@ public class CommandSkillPoints implements ISubCommand {
     }
 
     @Override
-    public void execute(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(ICommandSender sender, String[] args) {
         EntityPlayerMP player = (EntityPlayerMP)sender;
         String UUID = player.getUniqueID().toString();
 
@@ -31,11 +30,6 @@ public class CommandSkillPoints implements ISubCommand {
 
         int SavedSkillPoints = Skills.getInteger("SkillPoints");
         player.addChatMessage(new ChatComponentText("\u00A73You have " + SavedSkillPoints + " Skill Points!"));
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 0;
     }
 
     @Override

@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.8-1.6-BETA"
+version = "1.8-1.8-BETA"
 group= "HxCKDMS.HxCSkills"
 archivesBaseName = "HxCSkills"
 
@@ -34,7 +34,7 @@ dependencies {
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
 	
-    runtime files('libs/HxCCore-1.8-1.6-dev.jar')
+    runtime files('libs/HxCCore-1.8-1.8-dev.jar')
 	
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
