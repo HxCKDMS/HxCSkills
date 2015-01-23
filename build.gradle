@@ -46,12 +46,6 @@ dependencies {
 
 }
 
-jar {
-        manifest {
-        attributes 'FMLAT': 'accessTransformer.cfg'
-    }
-}
-
 processResources
 {
     // this will ensure that this task is redone when the versions change.
