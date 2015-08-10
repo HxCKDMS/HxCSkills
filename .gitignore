@@ -1,7 +1,9 @@
-# Created by .gitignore support plugin (hsz.mobi)
-HxCSkills.iml
-HxCSkills.iws
-HxCSkills.ipr
-gradle
+# Created by DrZed by hand
+*.iml
+*.iws
+*.ipr
 eclipse
-src/main/java/HxCKDMS/HxCCore
+out
+build
+.*
+!.gitignore

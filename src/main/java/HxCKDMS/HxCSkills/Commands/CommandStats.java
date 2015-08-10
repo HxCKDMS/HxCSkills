@@ -1,80 +1,65 @@
 package HxCKDMS.HxCSkills.Commands;
 
-import HxCKDMS.HxCCore.Commands.ISubCommand;
-import HxCKDMS.HxCCore.Handlers.NBTFileIO;
-import HxCKDMS.HxCCore.HxCCore;
-import net.minecraft.command.*;
+import HxCKDMS.HxCCore.api.ISubCommand;
+import HxCKDMS.HxCSkills.lib.Skills;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
-import java.io.File;
 import java.util.List;
 
 public class CommandStats implements ISubCommand {
     public static CommandStats instance = new CommandStats();
 
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "Stats";
     }
+    //TODO: REWRITE || REMOVE
 
     @Override
-    public void execute(ICommandSender sender, String[] args) throws PlayerNotFoundException {
+    public void handleCommand(ICommandSender sender, String[] args) throws PlayerNotFoundException {
         EntityPlayerMP target = (args.length==2) ? CommandBase.getPlayer(sender, args[1]) : (EntityPlayerMP)sender;
-        String UUID = target.getUniqueID().toString();
+        Skills.update(target);
+        NBTTagCompound data = Skills.SkillData(target);
 
-        File CustomPlayerData = new File(HxCCore.HxCCoreDir, "HxC-" + UUID + ".dat");
+        String[] msgs = new String[16];
 
-        NBTTagCompound Skills = NBTFileIO.getNbtTagCompound(CustomPlayerData, "skills");
-
-        int SavedSkillPoints = Skills.getInteger("SkillPoints");
-
-        int ArmStrength = Skills.getInteger("ArmStrengthLevel");
-        int LegStrength = Skills.getInteger("LegStrengthLevel");
-        int TorsoStrength = Skills.getInteger("TorsoStrengthLevel");
-        int HeadStrength = Skills.getInteger("HeadStrengthLevel");
-        int FeetStrength = Skills.getInteger("FeetStrengthLevel");
-        int Health = Skills.getInteger("HealthLevel");
-        int Stamina = Skills.getInteger("StaminaLevel");
-        int FlyLevel = Skills.getInteger("FlyLevel");
+        msgs[0] = ("\u00A73ArmStrength: " + data.getInteger("ArmStrengthLevel"));
+        msgs[1] = ("\u00A79LegStrength: " + data.getInteger("LegStrengthLevel"));
+        msgs[2] = ("\u00A73TorsoStrength: " + data.getInteger("LegStrengthLevel"));
+        msgs[3] = ("\u00A79HeadStrength: " + data.getInteger("HeadStrengthLevel"));
+        msgs[4] = ("\u00A73FeetStrength: " + data.getInteger("FeetStrengthLevel"));
+        msgs[5] = ("\u00A79Health: " + data.getInteger("HealthLevel"));
+        msgs[6] = ("\u00A73Stamina: " + data.getInteger("StaminaLevel"));
+        msgs[7] = ("\u00A79Fly Level: " + data.getInteger("FlyLevel"));
+        msgs[8] = ("\u00A73Stealth: " + data.getInteger("StealthLevel"));
+        msgs[9] = ("\u00A79Immunity Level: " + data.getInteger("ImmunityLevel"));
 
         if (args.length == 2) {
-            target.addChatMessage(new ChatComponentText("\u00A7b\u00A76" + target.getName() + "\u00A7nSTATS"));
-            ChatComponentText AS = new ChatComponentText("\u00A73ArmStrength: " + ArmStrength);
-            ChatComponentText LS = new ChatComponentText("\u00A79LegStrength: " + LegStrength);
-            ChatComponentText TS = new ChatComponentText("\u00A73TorsoStrength: " + TorsoStrength);
-            ChatComponentText HS = new ChatComponentText("\u00A79HeadStrength: " + HeadStrength);
-            ChatComponentText FS = new ChatComponentText("\u00A73FeetStrength: " + FeetStrength);
-            ChatComponentText HL = new ChatComponentText("\u00A79Health: " + Health);
-            ChatComponentText SL = new ChatComponentText("\u00A73Stamina: " + Stamina);
-            ChatComponentText FL = new ChatComponentText("\u00A79Fly Level: " + FlyLevel);
-            sendStats(target, AS, LS, TS, HS, FS, HL, SL, FL);
+            target.addChatMessage(new ChatComponentText("\u00A7b\u00A76" + target.getDisplayName() + "\u00A7nSTATS"));
+            sendStats(target, msgs);
         } else {
             target.addChatMessage(new ChatComponentText("\u00A7b\u00A76     \u00A7nSTATS"));
-            target.addChatMessage(new ChatComponentText("\u00A71Skill Points: " + SavedSkillPoints));
-            ChatComponentText AS = new ChatComponentText("\u00A73ArmStrength: " + ArmStrength);
-            ChatComponentText LS = new ChatComponentText("\u00A79LegStrength: " + LegStrength);
-            ChatComponentText TS = new ChatComponentText("\u00A73TorsoStrength: " + TorsoStrength);
-            ChatComponentText HS = new ChatComponentText("\u00A79HeadStrength: " + HeadStrength);
-            ChatComponentText FS = new ChatComponentText("\u00A73FeetStrength: " + FeetStrength);
-            ChatComponentText HL = new ChatComponentText("\u00A79Health: " + Health);
-            ChatComponentText SL = new ChatComponentText("\u00A73Stamina: " + Stamina);
-            ChatComponentText FL = new ChatComponentText("\u00A79Fly Level: " + FlyLevel);
-            sendStats(target, AS, LS, TS, HS, FS, HL, SL, FL);
+            target.addChatMessage(new ChatComponentText("\u00A71Skill Points: " + data.getInteger("SkillPoints")));
+            sendStats(target, msgs);
         }
     }
-    
-    public void sendStats (EntityPlayerMP target, ChatComponentText AS, ChatComponentText LS, ChatComponentText TS, ChatComponentText HS, ChatComponentText FS, ChatComponentText HL, ChatComponentText SL, ChatComponentText FL) {
-        target.addChatMessage(AS);
-        target.addChatMessage(LS);
-        target.addChatMessage(TS);
-        target.addChatMessage(HS);
-        target.addChatMessage(FS);
-        target.addChatMessage(HL);
-        target.addChatMessage(SL);
-        target.addChatMessage(FL);
+
+    public void sendStats (EntityPlayerMP target, String[] Msg) {
+        target.addChatMessage(new ChatComponentText(Msg[0]));
+        target.addChatMessage(new ChatComponentText(Msg[1]));
+        target.addChatMessage(new ChatComponentText(Msg[2]));
+        target.addChatMessage(new ChatComponentText(Msg[3]));
+        target.addChatMessage(new ChatComponentText(Msg[4]));
+        target.addChatMessage(new ChatComponentText(Msg[5]));
+        target.addChatMessage(new ChatComponentText(Msg[6]));
+        target.addChatMessage(new ChatComponentText(Msg[7]));
+        target.addChatMessage(new ChatComponentText(Msg[8]));
+        target.addChatMessage(new ChatComponentText(Msg[9]));
     }
 
     @SuppressWarnings("unchecked")

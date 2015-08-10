@@ -1,28 +1,25 @@
 package HxCKDMS.HxCSkills.Commands;
 
-import HxCKDMS.HxCCore.Commands.ISubCommand;
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
+import HxCKDMS.HxCCore.api.ISubCommand;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CommandBase extends net.minecraft.command.CommandBase {
     
     public static CommandBase instance = new CommandBase();
-    private static TMap<String, ISubCommand> commands = new THashMap<String, ISubCommand>();
+    private static HashMap<String, ISubCommand> commands = new HashMap<>();
     
     static {
         registerSubCommand(CommandHelp.instance);
-        registerSubCommand(CommandXPtoSP.instance);
-        registerSubCommand(CommandSkillPoints.instance);
-        registerSubCommand(CommandAddPoint.instance);
         registerSubCommand(CommandStats.instance);
         registerSubCommand(CommandResetSkills.instance);
+        registerSubCommand(CommandSetSkills.instance);
     }
     
     public static void initCommands(FMLServerStartingEvent event) {
@@ -36,21 +33,21 @@ public class CommandBase extends net.minecraft.command.CommandBase {
     }
 
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "HxCSkills";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/" + getName() + " help";
+        return "/" + getCommandName() + " help";
     }
 
     @Override
-    public void execute(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length > 0) {
             String k = args[0].toLowerCase();
             if (commands.containsKey(k)) {
-                commands.get(k).execute(sender, args);
+                commands.get(k).handleCommand(sender, args);
             } else {
                 throw new WrongUsageException("Type '" + getCommandUsage(sender) + "' for help.");
             }
@@ -61,15 +58,14 @@ public class CommandBase extends net.minecraft.command.CommandBase {
     
     @SuppressWarnings("unchecked")
     @Override
-    public List getAliases() {
+    public List getCommandAliases() {
         List aliases = new ArrayList();
         aliases.add("HxCSkills");
         aliases.add("HxCS");
         return aliases;
     }
-    
     public static boolean registerSubCommand(ISubCommand subCommand) {
-        String k = subCommand.getName().toLowerCase();
+        String k = subCommand.getCommandName().toLowerCase();
         
         if (!commands.containsKey(k)) {
             commands.put(k, subCommand);
